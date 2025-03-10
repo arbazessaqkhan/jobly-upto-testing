@@ -2,7 +2,7 @@ import {CommonFields, ServerError, SuccessResponse} from "@lib/util";
 
 
 
-export class CrudApiService<ITEMDTO extends CommonFields, ITEM> {
+export class CrudApiService<ITEM> {
     private endpoint = `/api/${this.resource}`;
 
 
@@ -28,22 +28,22 @@ export class CrudApiService<ITEMDTO extends CommonFields, ITEM> {
         }
     }
 
-    public async createItem(item: ITEM): Promise<SuccessResponse<ITEMDTO>> {
+    public async createItem(item: ITEM): Promise<SuccessResponse<ITEM & CommonFields>> {
         const response = await fetch(this.endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(item),
         });
-        return this.handleResponse<ITEMDTO>(response);
+        return this.handleResponse<ITEM & CommonFields>(response);
     }
 
-    public async updateItem(id: number, item: ITEM): Promise<SuccessResponse<ITEMDTO>> {
+    public async updateItem(id: number, item: ITEM): Promise<SuccessResponse<ITEM & CommonFields>> {
         const response = await fetch(`${this.endpoint}?id=${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(item),
         });
-        return this.handleResponse<ITEMDTO>(response);
+        return this.handleResponse<ITEM & CommonFields>(response);
     }
 
     public async deleteItem(id: number): Promise<SuccessResponse<{ id: number }>> {
@@ -54,8 +54,8 @@ export class CrudApiService<ITEMDTO extends CommonFields, ITEM> {
         return this.handleResponse<{ id: number }>(response);
     }
 
-    public async getItems(): Promise<SuccessResponse<ITEMDTO[]>> {
+    public async getItems(): Promise<SuccessResponse<(ITEM & CommonFields)[]>> {
         const response = await fetch(this.endpoint);
-        return this.handleResponse<ITEMDTO[]>(response);
+        return this.handleResponse<(ITEM & CommonFields)[]>(response);
     }
 }

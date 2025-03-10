@@ -2,8 +2,8 @@
 "use client";
 
 import {CrudApiService} from "@lib/crud";
-import {User, UserDto} from "@/modules/users/users.schema";
+import {User} from "@/modules/users/users.schema";
 
-export class UsersService extends CrudApiService<UserDto, User>{
+export class UsersService extends CrudApiService<User>{
 
 }

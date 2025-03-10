@@ -5,14 +5,14 @@ import {toast} from "react-toastify";
 import {Job, JobDto} from "../jobs.schema";
 import JobFormModal from "./JobFormModal";
 import {ZodIssueBase} from "zod";
-import {JobsService} from "@/modules/jobs/jobs.service";
 import {ServerError} from "@lib/util";
+import {CrudApiService} from "@lib/crud";
 
 export default function JobsPage() {
     const [jobs, setJobs] = useState<JobDto[]>([]);
     const [editJob, setEditJob] = useState<JobDto | null>(null);
 
-    const jobsService = new JobsService('jobs');
+    const jobsService = new CrudApiService<Job>('jobs');
 
     // Default values for creation
     const defaultValues: Job = {

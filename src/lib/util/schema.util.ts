@@ -10,6 +10,10 @@ export const commonSchemaFields = {
         (arg) => (typeof arg === "string" ? new Date(arg) : arg),
         z.date()
     ),
+    // deleted_at: z.preprocess(
+    //     (arg) => (typeof arg === "string" ? new Date(arg) : arg),
+    //     z.date()
+    // ),
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commonSchemaObject = z.object(commonSchemaFields);

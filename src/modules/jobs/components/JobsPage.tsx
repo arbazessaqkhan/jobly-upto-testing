@@ -2,10 +2,11 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {CreateJobDto, JobDto, ServerError, UpdateJobDto} from "../schema";
+import {CreateJobDto, JobDto, UpdateJobDto} from "../jobs.schema";
 import JobFormModal from "./JobFormModal";
 import {ZodIssueBase} from "zod";
 import {JobsService} from "@/modules/jobs/jobs.service";
+import {ServerError} from "@lib/util";
 
 export default function JobsPage() {
     const [jobs, setJobs] = useState<JobDto[]>([]);

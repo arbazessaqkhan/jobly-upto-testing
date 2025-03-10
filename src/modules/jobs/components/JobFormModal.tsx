@@ -5,8 +5,9 @@ import React from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {CreateJobDto, createOrUpdateJobSchema, JobDto, ServerError, UpdateJobDto} from "../schema";
-import FormField from "@/components/FormField";
+import {CreateJobDto, createOrUpdateJobSchema, JobDto, UpdateJobDto} from "../jobs.schema";
+import {ServerError} from "@lib/util";
+import FormField from "@lib/form/FormField";
 
 type Props = {
     defaultValues: z.infer<typeof createOrUpdateJobSchema>;
@@ -26,11 +27,7 @@ export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props
     React.useEffect(() => {
         if (editJob) {
             form.reset({
-                title: editJob.title,
-                description: editJob.description,
-                salary: editJob.salary,
-                is_active: editJob.is_active,
-                location: editJob.location,
+               ...editJob
             });
         } else {
             form.reset(defaultValues);

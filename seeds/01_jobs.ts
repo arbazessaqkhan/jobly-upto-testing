@@ -1,5 +1,6 @@
 import { Knex } from "knex";
-import {CreateJobDto} from "@/modules/jobs/jobs.service";
+import {CreateJobDto} from "@/modules/jobs/jobs.schema";
+
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries

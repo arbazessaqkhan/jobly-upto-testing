@@ -1,5 +1,5 @@
-import JobsPage from "@/modules/jobs/components/JobsPage";
+import UsersPage from "@/modules/users/components/UsersPage";
 
 export default function Page() {
-  return <JobsPage />;
+  return <UsersPage />;
 }

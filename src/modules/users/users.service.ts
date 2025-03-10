@@ -1,15 +1,13 @@
-//src/modules/jobs/jobs.service.ts
+//src/modules/users/users.service.ts
 "use client";
 
-// src/modules/jobs/schema.ts
-import {CreateJobDto, JobDto, UpdateJobDto} from "@/modules/jobs/jobs.schema";
-import {SuccessResponse, ServerError} from "@lib/util";
-
-
+// src/modules/users/schema.ts
+import {CreateUserDto, UpdateUserDto, UserDto} from "./users.schema";
+import {ServerError, SuccessResponse} from "@lib/util";
 
 // Helper responses (unchanged)
-export class JobsService {
-    private endpoint = `/api/jobs`;
+export class UsersService {
+    private endpoint = `/api/users`;
 
     /**
      * Handle JSON parsing & error standardization.
@@ -29,25 +27,25 @@ export class JobsService {
         }
     }
 
-    public async createJob(job: CreateJobDto): Promise<SuccessResponse<JobDto>> {
+    public async createUser(user: CreateUserDto): Promise<SuccessResponse<UserDto>> {
         const response = await fetch(this.endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(job),
+            body: JSON.stringify(user),
         });
-        return this.handleResponse<JobDto>(response);
+        return this.handleResponse<UserDto>(response);
     }
 
-    public async updateJob(id: number, job: UpdateJobDto): Promise<SuccessResponse<JobDto>> {
+    public async updateUser(id: number, user: UpdateUserDto): Promise<SuccessResponse<UserDto>> {
         const response = await fetch(`${this.endpoint}?id=${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(job),
+            body: JSON.stringify(user),
         });
-        return this.handleResponse<JobDto>(response);
+        return this.handleResponse<UserDto>(response);
     }
 
-    public async deleteJob(id: number): Promise<SuccessResponse<{ id: number }>> {
+    public async deleteUser(id: number): Promise<SuccessResponse<{ id: number }>> {
         const response = await fetch(`${this.endpoint}?id=${id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -55,8 +53,8 @@ export class JobsService {
         return this.handleResponse<{ id: number }>(response);
     }
 
-    public async getJobs(): Promise<SuccessResponse<JobDto[]>> {
+    public async getUsers(): Promise<SuccessResponse<UserDto[]>> {
         const response = await fetch(this.endpoint);
-        return this.handleResponse<JobDto[]>(response);
+        return this.handleResponse<UserDto[]>(response);
     }
 }

@@ -12,6 +12,10 @@ const navItems = [
     href: "/jobs",
     label: "Jobs",
   },
+  {
+    href: "/users",
+    label: "Users",
+  },
 ];
 
 export default function Navbar() {
@@ -20,7 +24,7 @@ export default function Navbar() {
     <>
       <nav className="navbar navbar-expand-lg bg-light border-bottom">
         <div className="container">
-          <Link className="navbar-brand" href="/">
+          <Link className="navbar-brand" href="/public">
             Jobly
           </Link>
           <button

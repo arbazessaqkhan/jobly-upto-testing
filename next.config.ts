@@ -1,0 +1,10 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  serverExternalPackages: ["knex"],
+  env: {
+    BASE_API_URL: process.env.BASE_API_URL,
+  },
+};
+
+export default nextConfig;

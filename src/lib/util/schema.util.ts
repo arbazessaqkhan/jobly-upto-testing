@@ -11,3 +11,6 @@ export const commonSchemaFields = {
         z.date()
     ),
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const commonSchemaObject = z.object(commonSchemaFields);
+export type CommonFields =  z.infer<typeof commonSchemaObject>;

@@ -2,9 +2,7 @@ import * as z from "zod";
 import {commonSchemaFields} from "@lib/util";
 
 export type JobDto = z.infer<typeof jobSchema>;
-export type CreateJobDto = z.infer<typeof createOrUpdateJobSchema>;
-export type UpdateJobDto = JobDto;
-
+export type Job = z.infer<typeof createOrUpdateJobSchema>;
 export const LocationEnum = z.enum(["Remote", "Onsite", "Hybrid"]);
 
 export const createOrUpdateJobSchema = z.object({

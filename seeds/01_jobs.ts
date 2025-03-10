@@ -1,12 +1,12 @@
 import { Knex } from "knex";
-import {CreateJobDto} from "@/modules/jobs/jobs.schema";
+import {Job} from "@/modules/jobs/jobs.schema";
 
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     await knex("jobs").del();
 
-    const jobs: CreateJobDto[] = [
+    const jobs: Job[] = [
         {
             title: "Software Engineer",
             description: "Develops software applications",

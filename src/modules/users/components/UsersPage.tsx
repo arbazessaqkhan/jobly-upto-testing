@@ -2,28 +2,28 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {CreateUserDto, UserDto, UpdateUserDto} from "../users.schema";
+import {User, UserDto} from "../users.schema";
 import UserFormModal from "./UserFormModal";
 import {ZodIssueBase} from "zod";
-import {UsersService} from "../users.service";
+import {UsersService} from "@/modules/users/users.service";
 import {ServerError} from "@lib/util";
 
 export default function UsersPage() {
     const [users, setUsers] = useState<UserDto[]>([]);
     const [editUser, setEditUser] = useState<UserDto | null>(null);
 
-    const usersService = new UsersService();
+    const usersService = new UsersService('users');
 
     // Default values for creation
-    const defaultValues: CreateUserDto = {
+    const defaultValues: User = {
         name: "",
         email: "",
-        password: "",
+        password: ""
     };
 
     const fetchUsers = async () => {
         try {
-            const response = await usersService.getUsers();
+            const response = await usersService.getItems();
             if (response.success) {
                 setUsers(response.data);
             }
@@ -51,25 +51,25 @@ export default function UsersPage() {
 
     const onDelete = async (id: number) => {
         try {
-            const response = await usersService.deleteUser(id);
+            const response = await usersService.deleteItem(id);
             if (response.success) {
-                setUsers((prev) => prev.filter((user) => user.id !== id));
+                setUsers((prev) => prev.filter((job) => job.id !== id));
             }
         } catch (error: unknown) {
-            console.error("Failed to delete user:", error);
-            toast.error(error?.["message"] || "Failed to delete user");
+            console.error("Failed to delete job:", error);
+            toast.error(error?.["message"] || "Failed to delete job");
         }
     };
 
-    const onEdit = (user: UserDto) => {
-        setEditUser(user);
+    const onEdit = (job: UserDto) => {
+        setEditUser(job);
     };
 
-    const onSubmit = async (data: CreateUserDto | UpdateUserDto, closeButtonRef?: React.RefObject<HTMLButtonElement | null>) => {
+    const onSubmit = async (data: User , closeButtonRef?: React.RefObject<HTMLButtonElement | null>) => {
         // If there's an editUser, we’re updating; otherwise, we’re creating.
         if (!editUser) {
             try {
-                const createResponse = await usersService.createUser(data as CreateUserDto);
+                const createResponse = await usersService.createItem(data as User);
                 setUsers((prev) => [...prev, createResponse.data]);
                 toast.success("User created successfully");
                 hideModal(closeButtonRef);
@@ -79,7 +79,7 @@ export default function UsersPage() {
             }
         } else {
             try {
-                const updateResponse = await usersService.updateUser(editUser.id, data as UpdateUserDto);
+                const updateResponse = await usersService.updateItem(editUser.id, data as User);
                 setUsers((prev) =>
                     prev.map((j) => (j.id === updateResponse.data.id ? updateResponse.data : j))
                 );
@@ -129,7 +129,7 @@ export default function UsersPage() {
 
 type UsersTableProps = {
     users: UserDto[];
-    onEdit: (user: UserDto) => void;
+    onEdit: (job: UserDto) => void;
     onDelete: (id: number) => void;
 };
 

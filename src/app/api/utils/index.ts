@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import * as z from "zod";
-import {ServerError, SuccessResponse} from "@/modules/jobs/jobs.service";
+import {ServerError, SuccessResponse} from "@lib/util";
 
 export function returnSuccessResponse<T>(
     data: T,

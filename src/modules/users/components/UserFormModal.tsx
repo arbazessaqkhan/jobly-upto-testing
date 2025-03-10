@@ -5,14 +5,14 @@ import React from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {CreateUserDto, createOrUpdateUserSchema, UserDto, UpdateUserDto} from "../users.schema";
+import {createOrUpdateUserSchema, User} from "../users.schema";
 import {ServerError} from "@lib/util";
 import FormField from "@lib/form/FormField";
 
 type Props = {
     defaultValues: z.infer<typeof createOrUpdateUserSchema>;
-    editUser: UserDto | null;
-    onSubmit: (data: CreateUserDto | UpdateUserDto, closeButtonRef?: React.RefObject<HTMLButtonElement | null> ) => void;
+    editUser: User | null;
+    onSubmit: (data: User , closeButtonRef?: React.RefObject<HTMLButtonElement | null> ) => void;
     onServerError?: (error: ServerError) => void;
 };
 

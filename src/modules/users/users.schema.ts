@@ -2,8 +2,7 @@ import * as z from "zod";
 import {commonSchemaFields} from "@lib/util";
 
 export type UserDto = z.infer<typeof userSchema>;
-export type CreateUserDto = z.infer<typeof createOrUpdateUserSchema>;
-export type UpdateUserDto = UserDto;
+export type User = z.infer<typeof createOrUpdateUserSchema>;
 
 
 export const createOrUpdateUserSchema = z.object({

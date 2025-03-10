@@ -5,14 +5,14 @@ import React from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {CreateJobDto, createOrUpdateJobSchema, JobDto, UpdateJobDto} from "../jobs.schema";
+import {Job, createOrUpdateJobSchema, JobDto} from "../jobs.schema";
 import {ServerError} from "@lib/util";
 import FormField from "@lib/form/FormField";
 
 type Props = {
     defaultValues: z.infer<typeof createOrUpdateJobSchema>;
     editJob: JobDto | null;
-    onSubmit: (data: CreateJobDto | UpdateJobDto, closeButtonRef?: React.RefObject<HTMLButtonElement | null> ) => void;
+    onSubmit: (data: Job, closeButtonRef?: React.RefObject<HTMLButtonElement | null> ) => void;
     onServerError?: (error: ServerError) => void;
 };
 

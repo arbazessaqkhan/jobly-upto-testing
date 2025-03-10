@@ -2,7 +2,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {CreateJobDto, JobDto, UpdateJobDto} from "../jobs.schema";
+import {Job, JobDto} from "../jobs.schema";
 import JobFormModal from "./JobFormModal";
 import {ZodIssueBase} from "zod";
 import {JobsService} from "@/modules/jobs/jobs.service";
@@ -12,10 +12,10 @@ export default function JobsPage() {
     const [jobs, setJobs] = useState<JobDto[]>([]);
     const [editJob, setEditJob] = useState<JobDto | null>(null);
 
-    const jobsService = new JobsService();
+    const jobsService = new JobsService('jobs');
 
     // Default values for creation
-    const defaultValues: CreateJobDto = {
+    const defaultValues: Job = {
         title: "",
         description: "",
         salary: 0,
@@ -25,7 +25,7 @@ export default function JobsPage() {
 
     const fetchJobs = async () => {
         try {
-            const response = await jobsService.getJobs();
+            const response = await jobsService.getItems();
             if (response.success) {
                 setJobs(response.data);
             }
@@ -53,13 +53,13 @@ export default function JobsPage() {
 
     const onDelete = async (id: number) => {
         try {
-            const response = await jobsService.deleteJob(id);
+            const response = await jobsService.deleteItem(id);
             if (response.success) {
                 setJobs((prev) => prev.filter((job) => job.id !== id));
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Failed to delete job:", error);
-            toast.error(error?.message || "Failed to delete job");
+            toast.error(error?.["message"] || "Failed to delete job");
         }
     };
 
@@ -67,11 +67,11 @@ export default function JobsPage() {
         setEditJob(job);
     };
 
-    const onSubmit = async (data: CreateJobDto | UpdateJobDto, closeButtonRef?: React.RefObject<HTMLButtonElement | null>) => {
+    const onSubmit = async (data: Job , closeButtonRef?: React.RefObject<HTMLButtonElement | null>) => {
         // If there's an editJob, we’re updating; otherwise, we’re creating.
         if (!editJob) {
             try {
-                const createResponse = await jobsService.createJob(data as CreateJobDto);
+                const createResponse = await jobsService.createItem(data as Job);
                 setJobs((prev) => [...prev, createResponse.data]);
                 toast.success("Job created successfully");
                 hideModal(closeButtonRef);
@@ -81,7 +81,7 @@ export default function JobsPage() {
             }
         } else {
             try {
-                const updateResponse = await jobsService.updateJob(editJob.id, data as UpdateJobDto);
+                const updateResponse = await jobsService.updateItem(editJob.id, data as Job);
                 setJobs((prev) =>
                     prev.map((j) => (j.id === updateResponse.data.id ? updateResponse.data : j))
                 );

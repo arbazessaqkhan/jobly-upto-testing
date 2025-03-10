@@ -27,13 +27,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+      <html lang="en">
+      <link rel="stylesheet"
+            href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"/>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Navbar />
-        {children}
-        <ToastContainer />
-        <BootstrapClient />
+      <Navbar/>
+      {children}
+      <ToastContainer/>
+      <BootstrapClient/>
       </body>
-    </html>
+      </html>
   );
 }

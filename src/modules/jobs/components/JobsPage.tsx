@@ -7,12 +7,15 @@ import JobFormModal from "./JobFormModal";
 import {ZodIssueBase} from "zod";
 import {ServerError} from "@lib/util";
 import {CrudApiService} from "@lib/crud";
+import {CommonButton} from "@lib/common/CommonButton";
 
 export default function JobsPage() {
     const [jobs, setJobs] = useState<JobDto[]>([]);
     const [editJob, setEditJob] = useState<JobDto | null>(null);
 
     const jobsService = new CrudApiService<Job>('jobs');
+
+    const [loading, setLoading] = useState(false);
 
     // Default values for creation
     const defaultValues: Job = {
@@ -71,6 +74,7 @@ export default function JobsPage() {
         // If there's an editJob, we’re updating; otherwise, we’re creating.
         if (!editJob) {
             try {
+                setLoading(true);
                 const createResponse = await jobsService.createItem(data as Job);
                 setJobs((prev) => [...prev, createResponse.data]);
                 toast.success("Job created successfully");
@@ -78,9 +82,12 @@ export default function JobsPage() {
 
             } catch (error) {
                 handleServerValidation(error as ServerError);
+            } finally {
+                setLoading(false);
             }
         } else {
             try {
+                setLoading(true);
                 const updateResponse = await jobsService.updateItem(editJob.id, data as Job);
                 setJobs((prev) =>
                     prev.map((j) => (j.id === updateResponse.data.id ? updateResponse.data : j))
@@ -89,6 +96,8 @@ export default function JobsPage() {
                 toast.success("Job updated successfully");
             } catch (error) {
                 handleServerValidation(error as ServerError);
+            } finally {
+                setLoading(false);
             }
         }
     };
@@ -106,19 +115,31 @@ export default function JobsPage() {
                 <h1 className="m-0">
                     Jobs <span className="text-muted">({jobs.length})</span>
                 </h1>
-                <button
-                    className="btn btn-primary"
+                {/*<button*/}
+                {/*    className="btn btn-primary"*/}
+                {/*    data-bs-toggle="modal"*/}
+                {/*    data-bs-target="#formModal"*/}
+                {/*    onClick={() => setEditJob(null)} // to clear the form in the modal*/}
+                {/*>*/}
+                {/*    Create*/}
+                {/*</button>*/}
+
+                <CommonButton
+                    loading={loading}
                     data-bs-toggle="modal"
                     data-bs-target="#formModal"
-                    onClick={() => setEditJob(null)} // to clear the form in the modal
+                    onClick={() => setEditJob(null)}
+                    prefixIcon={'la-plus'}
+                    suffixIcon={'la-home'}
                 >
                     Create
-                </button>
+                </CommonButton>
             </div>
 
             <JobFormModal
                 defaultValues={defaultValues}
                 editJob={editJob}
+                loading={loading}
                 onSubmit={onSubmit}
             />
 

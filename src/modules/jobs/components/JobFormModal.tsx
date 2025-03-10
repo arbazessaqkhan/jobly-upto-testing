@@ -8,15 +8,17 @@ import * as z from "zod";
 import {Job, createOrUpdateJobSchema, JobDto} from "../jobs.schema";
 import {ServerError} from "@lib/util";
 import FormField from "@lib/form/FormField";
+import {CommonButton} from "@lib/common/CommonButton";
 
 type Props = {
     defaultValues: z.infer<typeof createOrUpdateJobSchema>;
     editJob: JobDto | null;
     onSubmit: (data: Job, closeButtonRef?: React.RefObject<HTMLButtonElement | null> ) => void;
     onServerError?: (error: ServerError) => void;
+    loading: boolean;
 };
 
-export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props) {
+export default function JobFormModal({ defaultValues, editJob, onSubmit, loading }: Props) {
     const form = useForm<z.infer<typeof createOrUpdateJobSchema>>({
         resolver: zodResolver(createOrUpdateJobSchema),
         defaultValues,
@@ -77,6 +79,7 @@ export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props
                                 name="title"
                                 register={form.register}
                                 error={form.formState.errors.title}
+                                loading={loading}
                             />
                             <FormField
                                 label="Description"
@@ -85,6 +88,7 @@ export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props
                                 name="description"
                                 register={form.register}
                                 error={form.formState.errors.description}
+                                loading={loading}
                             />
                             <FormField
                                 label="Location"
@@ -93,6 +97,7 @@ export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props
                                 name="location"
                                 register={form.register}
                                 error={form.formState.errors.location}
+                                  loading={loading}
                                 options={[
                                     { value: "Remote", label: "Remote" },
                                     { value: "Onsite", label: "Onsite" },
@@ -106,6 +111,7 @@ export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props
                                 name="salary"
                                 register={form.register}
                                 error={form.formState.errors.salary}
+                                loading={loading}
                                 valueAsNumber
                             />
                             <FormField
@@ -114,16 +120,18 @@ export default function JobFormModal({ defaultValues, editJob, onSubmit }: Props
                                 name="is_active"
                                 placeholder="Is Active"
                                 error={form.formState.errors.is_active}
+                                  loading={loading}
                                 register={form.register}
                             />
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                            <CommonButton loading={loading} data-bs-dismiss="modal" variant={"secondary"}>
                                 Cancel
-                            </button>
-                            <button type="submit" className="btn btn-primary" role="button">
+                            </CommonButton>
+
+                            <CommonButton loading={loading}>
                                 {editJob ? "Update" : "Save"}
-                            </button>
+                            </CommonButton>
                         </div>
                     </form>
                 </div>

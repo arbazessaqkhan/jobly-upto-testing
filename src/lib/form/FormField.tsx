@@ -8,6 +8,7 @@ interface BaseFormFieldProps<T extends FieldValues> {
   register: UseFormRegister<T>;
   error?: FieldError;
   placeholder?: string;
+  loading?: boolean;
 }
 
 /** Props for text/number/checkbox fields */
@@ -59,6 +60,7 @@ export default function FormField<T extends FieldValues>(props: FormFieldProps<T
                 id={name}
                 {...register(name)}
                 data-testid={name}
+                disabled={props.loading}
             >
               {props.options.map((option) => (
                   <option
@@ -78,6 +80,7 @@ export default function FormField<T extends FieldValues>(props: FormFieldProps<T
                 className="form-control"
                 id={name}
                 placeholder={placeholder}
+                disabled={props.loading}
                 {...register(name)}
             />
         )}
@@ -89,6 +92,7 @@ export default function FormField<T extends FieldValues>(props: FormFieldProps<T
                 className={`${
                     props.type === "checkbox" ? "form-check-input" : "form-control"
                 }`}
+                disabled={props.loading}
                 id={name}
                 placeholder={placeholder}
                 {...register(name, {

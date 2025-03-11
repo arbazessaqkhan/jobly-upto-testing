@@ -2,21 +2,14 @@
 
 import Link from "next/link";
 import {usePathname} from "next/navigation";
+import {collections} from "@/app/sparkcms.config";
 
-const navItems = [
-  {
-    href: "/",
-    label: "Home",
-  },
-  {
-    href: "/jobs",
-    label: "Jobs",
-  },
-  {
-    href: "/users",
-    label: "Users",
-  },
-];
+const navItems = collections.map((collection) => {
+  return {
+    href: `/${collection.config.slug}`,
+    label: collection.config.label.plural,
+  }
+})
 
 export default function Navbar() {
   const pathname = usePathname();

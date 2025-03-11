@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import {Job} from "@/modules/jobs/jobs.schema";
+import {Job} from "@/app/jobs.schema";
 
 
 export async function seed(knex: Knex): Promise<void> {

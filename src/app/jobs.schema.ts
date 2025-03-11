@@ -1,7 +1,7 @@
-import {buildZodSchemaFromConfig, ConfigToInterface} from "@lib/crud";
+import {ConfigToInterface} from "@lib/crud";
 
 
-const jobCollection = {
+export const jobCollection = {
     columns: {
         title: {
             type: "text",
@@ -52,6 +52,4 @@ const jobCollection = {
     }
 } as const;
 
-
-export const createOrUpdateJobSchema = buildZodSchemaFromConfig(jobCollection.columns);
 export type Job = ConfigToInterface<typeof jobCollection.columns>;

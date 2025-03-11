@@ -1,5 +1,5 @@
 import {Knex} from "knex";
-import {CreateUserDto} from "@/modules/users/users.schema";
+import {CreateUserDto} from "@/app/users.schema";
 
 
 export async function seed(knex: Knex): Promise<void> {

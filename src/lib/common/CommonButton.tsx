@@ -25,7 +25,8 @@ export function CommonButton({loading, children, onClick,prefixIcon, suffixIcon,
               height: '16px',
               marginRight: '5px',
           }} role="status">
-                                </span>}
+
+          </span>}
 
 
           {prefixIcon &&  <i className={`las ${prefixIcon} mr-2`}></i>}

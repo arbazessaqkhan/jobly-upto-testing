@@ -2,13 +2,13 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {Job, JobDto} from "../jobs.schema";
+import {Job} from "../jobs.schema";
 import JobFormModal from "./JobFormModal";
 import {ZodIssueBase} from "zod";
 import {ServerError} from "@lib/util";
-import {CrudApiService} from "@lib/crud";
+import {CommonFieldTypes, CrudApiService} from "@lib/crud";
 import {CommonButton} from "@lib/common/CommonButton";
-
+type JobDto = Job & CommonFieldTypes
 export default function JobsPage() {
     const [jobs, setJobs] = useState<JobDto[]>([]);
     const [editJob, setEditJob] = useState<JobDto | null>(null);
@@ -29,8 +29,9 @@ export default function JobsPage() {
     const fetchJobs = async () => {
         try {
             const response = await jobsService.getItems();
+            const jobs = response.data as unknown as JobDto[];
             if (response.success) {
-                setJobs(response.data);
+                setJobs(jobs);
             }
         } catch (err) {
             console.error("Failed to fetch jobs:", err);
@@ -76,7 +77,8 @@ export default function JobsPage() {
             try {
                 setLoading(true);
                 const createResponse = await jobsService.createItem(data as Job);
-                setJobs((prev) => [...prev, createResponse.data]);
+                const job = createResponse.data as unknown as JobDto;
+                setJobs((prev) => [...prev, job]);
                 toast.success("Job created successfully");
                 hideModal(closeButtonRef);
 
@@ -89,8 +91,9 @@ export default function JobsPage() {
             try {
                 setLoading(true);
                 const updateResponse = await jobsService.updateItem(editJob.id, data as Job);
+                const job = updateResponse.data as unknown as JobDto;
                 setJobs((prev) =>
-                    prev.map((j) => (j.id === updateResponse.data.id ? updateResponse.data : j))
+                    prev.map((j) => (j.id === job.id ? job : j))
                 );
                 setEditJob(null);
                 toast.success("Job updated successfully");

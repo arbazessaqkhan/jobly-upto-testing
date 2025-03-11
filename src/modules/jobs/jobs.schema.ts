@@ -1,17 +1,57 @@
-import * as z from "zod";
-import {commonSchemaFields} from "@lib/util";
+import {buildZodSchemaFromConfig, ConfigToInterface} from "@lib/crud";
 
-export type JobDto = z.infer<typeof jobSchema>;
-export type Job = z.infer<typeof createOrUpdateJobSchema>;
-export const LocationEnum = z.enum(["Remote", "Onsite", "Hybrid"]);
 
-export const createOrUpdateJobSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
-    salary: z.coerce.number().positive("Salary must be positive"),
-    is_active: z.coerce.boolean(),
-    location: LocationEnum,
-});
+const jobCollection = {
+    columns: {
+        title: {
+            type: "text",
+            required: true,
+            label:"Title",
+            defaultValue: "",
+            minLength: 1,
+            maxLength: 20
+        },
+        description: {
+            type: "text",
+            required: true,
+            label:"Description",
+            defaultValue: "",
+            minLength: 1,
+            maxLength: 200,
+            rows: 4
+        },
+        salary: {
+            type: "number",
+            required: true,
+            label:"Salary",
+            defaultValue: 0,
+            min: 0,
+            max: 1000000,
+        },
+        is_active :{
+            type: "boolean",
+            required: true,
+            label:"Is Active",
+            defaultValue: true
+        },
+        location :{
+            type: "select",
+            required: true,
+            label:"Location",
+            defaultValue: "Remote",
+            options: ["Remote", "Onsite", "Hybrid"]
+        }
+    },
+    config: {
+        slug: "jobs", // This is the ur, tablename, and collection name, etc for the collection, and should be unique
+        label: {
+            singular: "Job",
+            plural: "Jobs"
+        },
+        timestamps: true
+    }
+} as const;
 
-export const jobSchema = createOrUpdateJobSchema.extend(commonSchemaFields);
 
+export const createOrUpdateJobSchema = buildZodSchemaFromConfig(jobCollection.columns);
+export type Job = ConfigToInterface<typeof jobCollection.columns>;

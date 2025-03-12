@@ -17,6 +17,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@hookform/resolvers": "^3.10.0",
     "@jest/globals": "^29.7.0",
     "better-sqlite3": "^11.8.1",

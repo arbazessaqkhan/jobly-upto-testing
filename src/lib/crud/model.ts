@@ -1,24 +1,30 @@
 import * as z from "zod";
 
-export interface TextFieldConfig {
-    type: "text";
+export type FieldValueTypes = string | number | boolean;
+export interface BaseFieldConfig {
+    type: "text" | "number" | "boolean" | "select";
     label: string;
+    defaultValue: FieldValueTypes;
+    required?: boolean;
+}
+
+export interface TextFieldConfig extends BaseFieldConfig{
+    type: "text";
     defaultValue: string;
     minLength?: number;
     maxLength?: number;
     rows?: number;
 }
 
-export interface NumberFieldConfig {
+export interface NumberFieldConfig  extends BaseFieldConfig {
     type: "number";
-    label: string;
     defaultValue: number;
     min?: number;
+    max?: number;
 }
 
-export interface BooleanFieldConfig {
+export interface BooleanFieldConfig  extends BaseFieldConfig {
     type: "boolean";
-    label: string;
     defaultValue: boolean;
 }
 
@@ -34,9 +40,8 @@ export interface CollectionInternalConfig {
 // Make SelectFieldConfig generic so that:
 // 1. options is a readonly tuple with at least one string
 // 2. defaultValue must be one of the options
-export interface SelectFieldConfig<Option extends string = string> {
+export interface SelectFieldConfig<Option extends string = string>  extends BaseFieldConfig{
     type: "select";
-    label: string;
     defaultValue: Option;
     options: readonly [Option, ...Option[]];
 }

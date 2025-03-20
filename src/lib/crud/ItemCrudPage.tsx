@@ -5,7 +5,7 @@ import ItemCrudFormModal from "./ItemCrudFormModal";
 import {ZodIssueBase} from "zod";
 import {ServerError} from "@lib/util";
 import {CollectionConfig, COMMON_FIELDS, CommonFieldTypes, CrudApiService} from "@lib/crud/index";
-import {CommonButton} from "@lib/common/CommonButton";
+import {CommonButton} from "@lib/common/CommonButton/CommonButton";
 import {DefaultValues, FieldValues} from "react-hook-form";
 
 export interface ItemsCrudPageProps {

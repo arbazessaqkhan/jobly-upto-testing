@@ -5,7 +5,7 @@ import {DefaultValues, FieldError, FieldValues, Path, SubmitHandler, useForm} fr
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ServerError} from "@lib/util";
 import FormField from "@lib/form/FormField";
-import {CommonButton} from "@lib/common/CommonButton";
+import {CommonButton} from "@lib/common/CommonButton/CommonButton";
 import {buildZodSchemaFromConfig, CollectionConfig, CommonFieldTypes, FieldConfig} from "@lib/crud/index";
 
 

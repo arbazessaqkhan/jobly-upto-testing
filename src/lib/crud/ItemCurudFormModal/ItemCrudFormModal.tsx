@@ -1,12 +1,12 @@
+// ItemCrudFormModal.tsx
 "use client";
-
 import React from "react";
 import {DefaultValues, FieldError, FieldValues, Path, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ServerError} from "@lib/util";
 import FormField from "@lib/form/FormField";
 import {CommonButton} from "@lib/common/CommonButton/CommonButton";
-import {buildZodSchemaFromConfig, CollectionConfig, CommonFieldTypes, FieldConfig} from "@lib/crud/index";
+import {buildZodSchemaFromConfig, CollectionConfig, CommonFieldTypes, FieldConfig} from "@lib/crud";
 
 
 type ItemFormModelProps<T> = {
@@ -14,7 +14,7 @@ type ItemFormModelProps<T> = {
     editItem: (T & CommonFieldTypes) | null;
     onSubmit: (data: T, closeButtonRef?: React.RefObject<HTMLButtonElement | null> ) => void;
     onServerError?: (error: ServerError) => void;
-    loading: boolean;
+    loading?: boolean;
     collectionConfig: CollectionConfig
 };
 
@@ -131,7 +131,7 @@ export default function ItemCrudFormModal<ITEM extends FieldValues>({ defaultVal
                                 Cancel
                             </CommonButton>
 
-                            <CommonButton loading={loading}>
+                            <CommonButton type={"submit"} loading={loading}>
                                 {editItem ? "Update" : "Save"}
                             </CommonButton>
                         </div>

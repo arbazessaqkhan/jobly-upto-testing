@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import ItemCrudFormModal from "./ItemCrudFormModal";
+import ItemCrudFormModal from "./ItemCurudFormModal/ItemCrudFormModal";
 import {ZodIssueBase} from "zod";
 import {ServerError} from "@lib/util";
 import {CollectionConfig, COMMON_FIELDS, CommonFieldTypes, CrudApiService} from "@lib/crud/index";

@@ -49,6 +49,7 @@ export default function ItemCrudFormModal<ITEM extends FieldValues>({ defaultVal
             tabIndex={-1}
             aria-labelledby="itemModalLabel"
             aria-hidden="true"
+            data-testid={`modal-form-${collectionConfig.config.slug}`}
         >
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
@@ -131,7 +132,9 @@ export default function ItemCrudFormModal<ITEM extends FieldValues>({ defaultVal
                                 Cancel
                             </CommonButton>
 
-                            <CommonButton type={"submit"} loading={loading}>
+                            <CommonButton
+                                dataTestId={`${collectionConfig.config.slug}-submit`}
+                                type={"submit"} loading={loading}>
                                 {editItem ? "Update" : "Save"}
                             </CommonButton>
                         </div>

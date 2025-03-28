@@ -16,10 +16,13 @@ export interface CommonButtonProps {
     suffixIcon?: LineAwesomeIcon;
     type?: "submit" | "button";
     disabled?: boolean;
+    dataTestId?: string;
 }
-export function CommonButton({loading, children, onClick,prefixIcon, suffixIcon, variant ="primary", type = "button", disabled,...props}: CommonButtonProps) {
+export function CommonButton({loading, children, onClick,prefixIcon, suffixIcon, variant ="primary", type = "button", dataTestId, disabled,...props}: CommonButtonProps) {
   return (
-      <button type={type} className={`btn btn-${variant}`} role="button" disabled={disabled || loading} {...props} onClick={onClick}>
+      <button
+          data-testid={dataTestId}
+          type={type} className={`btn btn-${variant}`} role="button" disabled={disabled || loading} {...props} onClick={onClick}>
 
 
           {loading && <span className="spinner-border" style={{

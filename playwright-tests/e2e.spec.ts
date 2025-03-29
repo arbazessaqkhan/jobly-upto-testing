@@ -1,11 +1,16 @@
 // tests/e2e.spec.ts
-import { test, expect } from '@playwright/test'
-import {Job} from "@/app/jobs.schema";
+import {expect, test} from '@playwright/test'
+import {Job, jobCollection} from "@/app/jobs.schema";
+import {Seeder} from "@lib/crud/seeder";
 
 test('Home page loads and ToggleButton works', async ({ page }) => {
     // Navigate to the homepage
-    await page.goto('/')
+    await page.goto('/');
+
     // await page.pause();
+    const seeder = new Seeder<Job>(jobCollection);
+    const jobToWrite = seeder.generateItem();
+
     const menuLinkElement = page.getByRole('link', { name: /Jobly/i })
     await expect(menuLinkElement).toBeVisible();
 
@@ -22,34 +27,32 @@ test('Home page loads and ToggleButton works', async ({ page }) => {
 
     const titleInput = page.getByTestId('title')
     await expect(titleInput).toBeVisible();
-    await titleInput.fill("Cyber Spark")
+    await titleInput.fill(jobToWrite.title)
 
     const descriptionInput = page.getByTestId('description')
     await expect(descriptionInput).toBeVisible();
-    await descriptionInput.fill("Cyber Spark")
+    await descriptionInput.fill(jobToWrite.description)
 
 
     const salaryInput = page.getByTestId('salary')
     await expect(salaryInput).toBeVisible();
-    await salaryInput.fill("2000")
+    await salaryInput.fill(jobToWrite.salary.toString())
 
 
     const activeCheckbox = page.getByTestId('is_active')
     await expect(activeCheckbox).toBeVisible();
+    if (jobToWrite.is_active){
     await activeCheckbox.check();
-
+    }
     const locationInput = page.getByTestId('location')
     await expect(locationInput).toBeVisible();
-    await locationInput.selectOption({label: "Hybrid"})
+    await locationInput.selectOption({value: jobToWrite.location});
 
     const submitButton = page.getByTestId("jobs-submit");
     await submitButton.click();
 
 
-
-    //
-    //
-    await page.pause();
+    // await page.pause();
 
 
 })

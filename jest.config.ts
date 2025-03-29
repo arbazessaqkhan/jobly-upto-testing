@@ -31,6 +31,7 @@ const config: Config = {
   // This is typically used to configure global settings, extend Jest assertions, or set up any required testing utilities.
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
+  testPathIgnorePatterns: ['/node_modules/', '/playwright-tests/'],
   // Map module names to specific paths using regular expressions.
   // This configuration correctly maps:
 // Any import starting with @/ to src/

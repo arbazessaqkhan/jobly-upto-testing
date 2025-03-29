@@ -24,18 +24,25 @@ export class Seeder<ITEM> {
         this.collection = collection;
     }
 
-    generateItem(): ITEM {
+    generateItem(editMode:  boolean = false): ITEM {
         const item: Record<string, FieldValueTypes> = {};
         for(const [columnName, columnConfig] of Object.entries(this.collection.columns)){
             item[columnName] = generateFieldData(columnConfig)
         }
+        if (editMode) {
+            item['id'] = faker.number.int({min: 1, max: 100})
+            if (this.collection.config.timestamps){
+                item["created_at"] = faker.date.anytime().toISOString()
+                item['updated_at'] = faker.date.anytime().toISOString()
+            }
+        }
         return item as ITEM;
     }
 
-    generateItems(count: number): ITEM[] {
+    generateItems(count: number, editMode: boolean = false): ITEM[] {
         const items: ITEM[] = [];
         for(let i = 0; i < count; i++){
-            items.push(this.generateItem());
+            items.push(this.generateItem(editMode));
         }
         return items as ITEM[];
 

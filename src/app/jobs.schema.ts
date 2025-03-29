@@ -9,7 +9,7 @@ export const jobCollection = {
             label:"Title",
             defaultValue: "",
             minLength: 1,
-            maxLength: 20
+            maxLength: 200
         },
         description: {
             type: "text",

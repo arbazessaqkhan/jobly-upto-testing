@@ -4,6 +4,7 @@ import ItemCrudFormModal from "./ItemCrudFormModal";
 import {Job, jobCollection} from "@/app/jobs.schema";
 import {CommonFieldTypes} from "@lib/crud";
 import userEvent from "@testing-library/user-event";
+import {Seeder} from "@lib/crud/seeder";
 
 
 const defaultValues: Job = {
@@ -34,16 +35,22 @@ describe('Item CurudFormModal', () => {
     });
 
     it('should populate the form fields in edit mode',async () => {
-        const editJob: Job & CommonFieldTypes = {
-            id: 1,
-            title: "React Developer",
-            description: "Unique opportunity to work on a cutting-edge project",
-            salary: 2000,
-            location: "Remote",
-            is_active: true,
-            created_at: '2021-09-01T00:00:00.000Z',
-            updated_at: '2021-09-01T00:00:00.000Z',
-        };
+        // const editJob: Job & CommonFieldTypes = {
+        //     id: 1,
+        //     title: "React Developer",
+        //     description: "Unique opportunity to work on a cutting-edge project",
+        //     salary: 2000,
+        //     location: "Remote",
+        //     is_active: true,
+        //     created_at: '2021-09-01T00:00:00.000Z',
+        //     updated_at: '2021-09-01T00:00:00.000Z',
+        // };
+
+
+         const seeder = new Seeder<Job & CommonFieldTypes>(jobCollection);
+         const editJob = seeder.generateItem(true);
+
+        console.log("cyber spark", editJob)
 
         const onSubmit = jest.fn();
         render(
@@ -62,7 +69,11 @@ describe('Item CurudFormModal', () => {
 
         const checkBoxElement = screen.getByRole("checkbox", { name: /is active/i, hidden: true });
         expect(checkBoxElement).toBeInTheDocument()
+        if (editJob.is_active){
         expect(checkBoxElement).toBeChecked()
+        }else {
+            expect(checkBoxElement).not.toBeChecked();
+        }
 
         const submitButton = screen.getByRole("button", { name: /update/i , hidden: true });
         expect(submitButton).toBeInTheDocument()
@@ -73,13 +84,16 @@ describe('Item CurudFormModal', () => {
 
 
     it('should populate the form fields in create mode',async () => {
-        const createJob: Job  = {
-            title: "React Developer",
-            description: "Unique opportunity to work on a cutting-edge project",
-            salary: 2000,
-            location: "Remote",
-            is_active: true
-        };
+        // const createJob: Job  = {
+        //     title: "React Developer",
+        //     description: "Unique opportunity to work on a cutting-edge project",
+        //     salary: 2000,
+        //     location: "Remote",
+        //     is_active: true
+        // };
+
+        const seeder = new Seeder<Job>(jobCollection);
+        const createJob = seeder.generateItem();
 
         const onSubmit = jest.fn();
         render(
@@ -111,17 +125,24 @@ describe('Item CurudFormModal', () => {
         await userEvent.type(salaryElement, createJob.salary.toString());
 
 
+
         const checkBoxElement: HTMLInputElement = screen.getByRole("checkbox", { name: /is active/i, hidden: true });
 
         if (createJob.is_active && !checkBoxElement.checked) {
             await userEvent.click(checkBoxElement);
         }
 
+        const locationElement:HTMLSelectElement = screen.getByTestId("location");
+        expect(locationElement).toBeInTheDocument();
+        await userEvent.selectOptions(locationElement, createJob.location);
+
+
 
         const submitButton = screen.getByRole("button", { name: /save/i , hidden: true });
         expect(submitButton).toBeInTheDocument()
         await userEvent.click(submitButton);
         expect(onSubmit).toHaveBeenCalled()
+
         expect(onSubmit).toHaveBeenCalledWith(createJob, expect.any(Object));
     });
 

@@ -69,6 +69,7 @@ export default function ItemCrudFormModal<ITEM extends FieldValues>({ defaultVal
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
                                 ref={closeButtonRef}
+                                data-testid={`modal-form-close-${collectionConfig.config.slug}`}
                             />
                         </div>
                         <div className="modal-body">

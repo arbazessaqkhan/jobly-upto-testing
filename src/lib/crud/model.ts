@@ -25,7 +25,7 @@ export interface NumberFieldConfig  extends BaseFieldConfig {
 
 export interface BooleanFieldConfig  extends BaseFieldConfig {
     type: "boolean";
-    defaultValue: boolean;
+    defaultValue: number | boolean;
 }
 
 export interface CollectionInternalConfig {
@@ -130,7 +130,11 @@ export function buildZodSchemaFromConfig<T extends ConfigObject>(
                 break;
             }
             case "boolean": {
-                schema = z.boolean().default(field.defaultValue);
+                // schema = z.number().min(0).max(1).default(field.defaultValue);
+                schema = z.union([
+                    z.boolean().transform(val => val ? 1 : 0),
+                    z.number().min(0).max(1)
+                ]).default(field.defaultValue);
                 break;
             }
             case "select": {

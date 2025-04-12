@@ -1,214 +1,67 @@
-Jobly Take-Home Assessment
-==========================
+# Payload Blank Template
 
-Welcome to the **Jobly** take-home assessment! Jobly is a simple job management application that allows users to create, update, and delete job postings. Your task is to fix the existing bugs in the code and ensure the application runs smoothly.
+This template comes configured with the bare minimum to get started on anything you need.
 
-**Prerequisites**
------------------
+## Quick start
 
-Before starting, ensure you have the following installed and properly configured:
+This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
 
-1.  **Git** -- Make sure Git is installed and accessible from your terminal or command prompt by running:
+## Quick Start - local setup
 
-    ```
-    git --version
+To spin up this template locally, follow these steps:
 
-    ```
+### Clone
 
-2.  **Node.js and npm** -- Ensure Node.js and npm are installed by running:
+After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
 
-    ```
-    node --version
-    npm --version
+### Development
 
-    ```
+1. First [clone the repo](#clone) if you have not done so already
+2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
 
-3.  **pnpm (Optional but Recommended)** -- We recommend using `pnpm` instead of `npm` as it is faster. If you choose to use `pnpm`, install it globally by running:
+3. `pnpm install && pnpm dev` to install dependencies and start the dev server
+4. open `http://localhost:3000` to open the app in your browser
 
-    ```
-    npm install -g pnpm
+That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
 
-    ```
+#### Docker (Optional)
 
-**Setup Instructions**
-----------------------
+If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
 
-1.  **Clone the Repository**:
+To do so, follow these steps:
 
-    -   Click on the **"Open in VSCode"** button (Note: This might take some time, be patient).
+- Modify the `MONGODB_URI` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
+- Modify the `docker-compose.yml` file's `MONGODB_URI` to match the above `<dbname>`
+- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
 
-    -   If the button does not work, manually copy the Git repository URL and run the following command in your terminal:
+## How it works
 
-        ```
-        git clone <repository-url>
+The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
 
-        ```
+### Collections
 
-    -   Navigate into the project directory:
+See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
 
-        ```
-        cd <cloned-repo-name>
+- #### Users (Authentication)
 
-        ```
+  Users are auth-enabled collections that have access to the admin panel.
 
-2.  **Install Dependencies**:
+  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
 
-    -   Run one of the following commands to install the required dependencies:
+- #### Media
 
-        ```
-        npm install
-        # or
-        pnpm install
+  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
 
-        ```
+### Docker
 
-    -   After installation, ensure you see a `node_modules` folder in the project directory.
+Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
 
-3.  **Set Up the Database**:
+1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
+1. Next run `docker-compose up`
+1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
 
-    -   Run database migrations to set up the table structure:
+That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
 
-        ```
-        npm run migrate:latest
-        # or
-        pnpm run migrate:latest
+## Questions
 
-        ```
-
-    -   Seed the database with sample data:
-
-        ```
-        npm run seed:run
-        # or
-        pnpm run seed:run
-
-        ```
-
-4.  **Run the Application**:
-
-    -   Start the development server using:
-
-        ```
-        npm run dev
-        # or
-        pnpm run dev
-
-        ```
-
-    -   Open the application in your browser at:
-
-        -   Default: [](http://localhost:3000/)<http://localhost:3000>
-        -   If you are using a different port, adjust the URL accordingly.
-
-* * * * *
-
-**Your Task**
--------------
-
-Your main task is to **fix the bugs** in the application.
-
-### **Steps to Follow:**
-
-1.  Run the application and navigate to the **Jobs** section by clicking "Jobs" in the menu.
-
-2.  By default, no jobs should appear, and you will see an error message: `"Failed to fetch jobs"`. This is your starting point.
-
-3.  Try creating a new job posting by clicking **"Create Job"**. This will likely fail---your task is to debug and fix these issues.
-
-4.  To track bugs and verify fixes, run the test suite using:
-
-    ```
-    npm run test
-    # or
-    pnpm run test
-
-    ```
-
-    -   On the first run, you should see:
-
-        ```
-        12 failed, 1 passed, 13 total
-
-        ```
-
-5.  Continue debugging and fixing errors. After each fix, re-run:
-
-    -   The application:
-
-        ```
-        npm run dev
-        # or
-        pnpm run dev
-
-        ```
-
-    -   The tests:
-
-        ```
-        npm run test
-        # or
-        pnpm run test
-
-        ```
-
-    -   Keep track of the number of failing tests as you progress.
-
-### **Test Cases Overview**
-
-The table below provides an overview of the key test cases and what they validate:
-
-| Test Name | Brief Description | Status |
-| --- | --- | --- |
-| renders modal with default values | Validate that the modal component renders with all default form fields present. | ✅ |
-| should create a job successfully | Verify job creation endpoint returns expected success response and payload. | ❌ |
-| should update a job successfully | Ensure job update endpoint returns proper confirmation and payload structure. | ❌ |
-| should delete a job successfully | Check that job deletion is handled correctly, including confirmation handling. | ❌ |
-| should return a list of jobs | Confirm that the jobs list endpoint returns the correct array of job items. | ❌ |
-| calls onSubmit with correct form data when creating a job | Ensure that form submission calls onSubmit with accurately parsed form data. | ❌ |
-| shows edit modal title when editJob is set | Verify that the modal title changes to reflect edit mode when a job is provided. | ❌ |
-| resets and clears form fields after submit | Check that form fields are reset to their initial state after submission. | ❌ |
-| displays validation errors for required fields and ensures error text is red | Confirm validation errors display appropriately and colour of error text which is shown on invalid fields is red | ❌ |
-| renders rows with correct data | Validate that the jobs table correctly displays job details in each row. | ❌ |
-| calls onEdit when Edit button is clicked | Ensure that clicking the Edit button triggers the onEdit callback with the right job. | ❌ |
-| calls onDelete when Delete button is clicked and user confirms | Verify delete functionality proceeds when confirmation is given. | ❌ |
-| does not call onDelete when Delete button is clicked and user cancels | Confirm that the deletion is not triggered when the user cancels the confirmation. | ❌ |
-
-### **Completion Criteria**
-
-✅ All **CRUD** functionalities for jobs should work correctly.
-
-✅ All **test cases** should pass successfully.
-
-✅ Proper **error messages** should be displayed when validation fails.
-
-* * * * *
-
-**Troubleshooting & Common Issues**
------------------------------------
-
-### **Database Issues**
-
--   If the database fails to load or you encounter issues, check for the `db.sqlite3` file in the project root.
--   If `db.sqlite3` is missing, create it manually by duplicating and renaming `empty.db.sqlite3` to `db.sqlite3`.
-
-### **Other Common Issues**
-
--   Ensure you are using the correct Node.js version (check with `node --version`). If needed, use **Node Version Manager (nvm)** to switch versions.
-
--   If you encounter permission issues, try running the commands with `sudo` (Mac/Linux) or as an administrator (Windows).
-
--   If the installation fails, try deleting the `node_modules` folder and `package-lock.json`, then reinstall:
-
-    ```
-    rm -rf node_modules package-lock.json
-    npm install
-    # or
-    pnpm install
-
-    ```
-
--   If the application does not start, check for missing environment variables. Ensure a `.env` file is present (if required) and properly configured.
-
-* * * * *
-
-Good luck! 🚀 If you have any questions, reach out for support at jobs@cyberspark.in.
+If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).

@@ -13,4 +13,6 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: true,
+  
+  timestamps: true
 }

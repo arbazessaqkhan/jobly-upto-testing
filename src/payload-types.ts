@@ -70,6 +70,9 @@ export interface Config {
     users: User;
     media: Media;
     jobs: Job;
+    job_applications: JobApplication;
+    assessments: Assessment;
+    questions: Question;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +82,9 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     jobs: JobsSelect<false> | JobsSelect<true>;
+    job_applications: JobApplicationsSelect<false> | JobApplicationsSelect<true>;
+    assessments: AssessmentsSelect<false> | AssessmentsSelect<true>;
+    questions: QuestionsSelect<false> | QuestionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -86,8 +92,12 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    settings: Setting;
+  };
+  globalsSelect: {
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -123,6 +133,8 @@ export interface User {
   id: string;
   name?: string | null;
   active?: boolean | null;
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -160,21 +172,7 @@ export interface Media {
 export interface Job {
   id: string;
   title: string;
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
+  description: string;
   location?: ('remote' | 'hybrid' | 'on-site') | null;
   comments?:
     | {
@@ -199,8 +197,65 @@ export interface Job {
     | null;
   isActive?: boolean | null;
   salary: number;
-  created_at?: string | null;
-  author?: (string | User)[] | null;
+  slug?: string | null;
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job_applications".
+ */
+export interface JobApplication {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  job?: (string | null) | Job;
+  cv?: (string | null) | Media;
+  status?: ('applied' | 'interviewing' | 'hired' | 'rejected') | null;
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "assessments".
+ */
+export interface Assessment {
+  id: string;
+  title?: string | null;
+  description?: string | null;
+  job?: (string | null) | Job;
+  questions?: (string | Question)[] | null;
+  status?: ('applied' | 'interviewing' | 'hired' | 'rejected') | null;
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questions".
+ */
+export interface Question {
+  id: string;
+  title?: string | null;
+  description?: string | null;
+  job?: (string | null) | Job;
+  duration?: number | null;
+  questionType?: ('mcq' | 'essay') | null;
+  options?:
+    | {
+        option?: string | null;
+        isCorrect?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  response?: string | null;
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -222,6 +277,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'jobs';
         value: string | Job;
+      } | null)
+    | ({
+        relationTo: 'job_applications';
+        value: string | JobApplication;
+      } | null)
+    | ({
+        relationTo: 'assessments';
+        value: string | Assessment;
+      } | null)
+    | ({
+        relationTo: 'questions';
+        value: string | Question;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -272,6 +339,8 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   active?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -317,8 +386,62 @@ export interface JobsSelect<T extends boolean = true> {
       };
   isActive?: T;
   salary?: T;
-  created_at?: T;
-  author?: T;
+  slug?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job_applications_select".
+ */
+export interface JobApplicationsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  job?: T;
+  cv?: T;
+  status?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "assessments_select".
+ */
+export interface AssessmentsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  job?: T;
+  questions?: T;
+  status?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questions_select".
+ */
+export interface QuestionsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  job?: T;
+  duration?: T;
+  questionType?: T;
+  options?:
+    | T
+    | {
+        option?: T;
+        isCorrect?: T;
+        id?: T;
+      };
+  response?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -353,6 +476,32 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  siteName: string;
+  siteDescription: string;
+  siteUrl: string;
+  siteLogo: string | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  siteDescription?: T;
+  siteUrl?: T;
+  siteLogo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

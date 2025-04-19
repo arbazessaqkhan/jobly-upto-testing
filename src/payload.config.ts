@@ -7,9 +7,13 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Users } from './collections/Users'
+import { Users } from './collections/Users/Users'
 import { Media } from './collections/Media'
-import { Jobs } from './collections/Jobs'
+import { Jobs } from './collections/Jobs/Jobs'
+import { JobApplications } from './collections/JobApplications'
+import { Assessments } from './collections/Assessments'
+import { Questions } from './collections/Questions'
+import { Settings } from './app/globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,8 +24,19 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    // components: {
+    //   graphics: {
+    //     Logo: '/collections/Users/ui/ButtonComponent',
+    //   }
+    // }
   },
-  collections: [Users, Media, Jobs],
+  collections: [Users, Media, Jobs, JobApplications, Assessments, Questions],
+  globals: [Settings],
+  hooks: {
+    afterError:[async ({ error }) => console.error('root level hook',error),
+
+    ]
+  },
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

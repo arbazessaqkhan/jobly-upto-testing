@@ -1,5 +1,29 @@
-import type { CollectionConfig } from 'payload'
-import { Where } from 'payload'
+import type {  CollectionConfig, FieldHook, FieldHookArgs } from 'payload'
+import { COMMON_COLUMN_FIELDS } from '../Common-fields'
+import { commonCollectionBeforeChangeCreatedByUpdatedByHook } from './hooks/jobsBeforeChange.hook'
+import { Job } from '@/payload-types'
+
+// const fieldLevelHook: FieldHook = async({data})=>{
+//   if(data?.title){
+//     data.title = data.title.toUpperCase() + ' field level hook' || data.title
+//   }
+//   console.log('field level',data)
+//   // return data not return here max call stack error
+// }
+
+const converToSlug = (str: string) => {
+  return str.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '').replace(/[^\w-]/g, '')
+}
+
+
+const beforeChangeSlugFieldJobsHook: FieldHook = async(args: FieldHookArgs<Job>)=>{
+  const {data} = args
+  if (data?.title){
+    data.slug = converToSlug(data.title)
+  }
+  
+}
+
 
 export const Jobs: CollectionConfig = {
   slug: 'jobs',
@@ -24,11 +48,15 @@ export const Jobs: CollectionConfig = {
                   required: true,
                   admin: {
                     width: '30%'
+                  },
+                  // hooks: {
+                  //   beforeChange: [fieldLevelHook]
+                  // }
                   }
-                },
+                ,
                 {
                   name: 'description',
-                  type: 'richText',
+                  type: 'textarea',
                   required: true,
                 },
               ]
@@ -41,6 +69,8 @@ export const Jobs: CollectionConfig = {
                 { label: 'Hybrid', value: 'hybrid' },
                 { label: 'On-Site', value: 'on-site' },
               ],
+
+              
             },
           ]
         },
@@ -68,54 +98,34 @@ export const Jobs: CollectionConfig = {
           ]
         }
       ],
-    }
-    ,
-
-    
-    //collapsible
-    {
-      label: 'group',
-      type: 'collapsible',
-      fields: [
-        {
-          name: 'isActive',
-          type: 'checkbox',
-          defaultValue: true,
-        },
-        {
-          name: 'salary',
-          type: 'number',
-          required: true,  
-        },
-      ]
     },
-    {
-      name: 'created_at',
-      type: 'date',
-      defaultValue: () => new Date(),
-      // changing using admin to day and time also
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime'
-        }
-    }
-  },
-  //relationship
-  {
-    name: 'author',
-    label: 'Author',
-    type: 'relationship',
-    relationTo: 'users',
-    hasMany: true,
-    filterOptions: (params) => {
-      // console.log(params)
-        const query: Where = {
-          active: {
-            equals: true
-          }
-        }
-        return query
-    }
-  }
+        //collapsible
+        {
+              name: 'isActive',
+              type: 'checkbox',
+              defaultValue: true,
+        },
+        {
+              name: 'salary',
+              type: 'number',
+              required: true,  
+        },
+        {
+              name: 'slug',
+              type: 'text',
+              // required: true,
+              hooks: {
+                    beforeChange: [beforeChangeSlugFieldJobsHook]
+                  }
+
+        },  
+
+        ...COMMON_COLUMN_FIELDS
+        
   ],
+  
+  timestamps: true,
+  hooks: {
+    beforeChange: [commonCollectionBeforeChangeCreatedByUpdatedByHook],
+  }
 }

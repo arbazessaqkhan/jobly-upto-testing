@@ -1,15 +1,27 @@
 'use client'
 import React, { useEffect } from 'react'
 import { DefaultCellComponentProps } from 'payload'
+import {useDocumentInfo} from "@payloadcms/ui"
+import { Button } from '../../../libs/shadcn/components/ui/button'
 
-const ButtonComponent: React.FC<DefaultCellComponentProps> = (props: DefaultCellComponentProps) => {
+
+const ButtonComponent: React.FC<DefaultCellComponentProps> = (props) => {
+
+    const {id, initialData} = useDocumentInfo();
+
+    //props.rowData for cell and initialData for field/edit mode //y id for for rowData or data respectively
+    const fieldOrCellData = props.rowData || initialData;
+
+    useEffect(()=>{
+        console.log("props:",id, fieldOrCellData)
+    })
 
   function markActive() {
       //send a patch req to server /api/users/user_id
     //   useEffect(()=> {
         
     //   })
-      const { id, ...rest } = props.rowData
+      const { id, ...rest } = fieldOrCellData
       const url = `/api/users/${id}`
       const data = {
         ...rest,
@@ -17,6 +29,7 @@ const ButtonComponent: React.FC<DefaultCellComponentProps> = (props: DefaultCell
       }
       const options = {
         method: 'PATCH',
+        credentials: 'include' as RequestCredentials,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -41,9 +54,9 @@ const ButtonComponent: React.FC<DefaultCellComponentProps> = (props: DefaultCell
   }
 
   return (
-    <button type="button" onClick={markActive}>
+    <Button type="button" onClick={markActive}>
       Mark as Active
-    </button>
+    </Button>
   )
 }
 

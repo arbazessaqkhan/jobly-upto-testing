@@ -1,7 +1,8 @@
 import type {  CollectionConfig, FieldHook, FieldHookArgs } from 'payload'
 import { COMMON_COLUMN_FIELDS } from '../Common-fields'
 import { commonCollectionBeforeChangeCreatedByUpdatedByHook } from './hooks/jobsBeforeChange.hook'
-import { Job } from '@/payload-types'
+import { Job, User } from '@/payload-types'
+import { JobsEndpoint } from './endpoints/jobs.endpoints'
 
 // const fieldLevelHook: FieldHook = async({data})=>{
 //   if(data?.title){
@@ -30,6 +31,10 @@ export const Jobs: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'location', 'created_at'],
+    //hide jobs for application manager
+    hidden:({user}) => {
+      return user?.role !== 'admin' && user?.role !== 'job-manager'
+    }
   },
   fields: [
     {
@@ -109,6 +114,14 @@ export const Jobs: CollectionConfig = {
               name: 'salary',
               type: 'number',
               required: true,  
+              
+              access: {
+                  update: ({req}) => {
+                    const user: User | null = req?.user;
+                    return user?.role === 'admin'
+                  }
+                }
+              
         },
         {
               name: 'slug',
@@ -116,7 +129,16 @@ export const Jobs: CollectionConfig = {
               // required: true,
               hooks: {
                     beforeChange: [beforeChangeSlugFieldJobsHook]
-                  }
+                  },
+
+              admin: {
+                readOnly: true,
+                condition: (data: Partial<Job>) => {
+                  console.log('data:',data?.slug)
+                  return !!data?.title
+                  
+                } 
+              }
 
         },  
 
@@ -127,5 +149,32 @@ export const Jobs: CollectionConfig = {
   timestamps: true,
   hooks: {
     beforeChange: [commonCollectionBeforeChangeCreatedByUpdatedByHook],
+  },
+  endpoints: [JobsEndpoint],
+  access: {
+    read: ({req}) => {
+      //read by admins and application managers
+      const user: User | null = req?.user;
+      return user?.role === 'admin' || user?.role === 'job-manager' || user?.role === 'application-manager' 
+    },
+
+    create: ({req}) => {
+      //read by admins and application managers
+      const user: User | null = req?.user;
+      return user?.role === 'admin' || user?.role === 'job-manager' },
+    
+      update: ({req}) => {
+        //read by admins and application managers
+        const user: User | null = req?.user;
+        return user?.role === 'admin' || user?.role === 'job-manager' },
+      
+      delete: ({req}) => {
+        //read by admins and application managers
+        const user: User | null = req?.user;
+        return user?.role === 'admin' 
+
   }
+
+  }
+
 }

@@ -14,6 +14,7 @@ import { JobApplications } from './collections/JobApplications'
 import { Assessments } from './collections/Assessments'
 import { Questions } from './collections/Questions'
 import { Settings } from './app/globals/Settings'
+import { JobsEndpoint } from './collections/Jobs/endpoints/jobs.endpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -37,6 +38,7 @@ export default buildConfig({
 
     ]
   },
+  endpoints: [JobsEndpoint],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

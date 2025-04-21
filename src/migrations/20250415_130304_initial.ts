@@ -9,14 +9,81 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
   //undefined user initially
   console.log('user: ', req?.user) 
 
-  const userDoc1 = await payload.create({
+  const adminDoc = await payload.create({
     collection: 'users',  //required
     data: {
       //required
-      email: 'hello@gmail.com',
+      email: 'admin@gmail.com',
       password: '12345',
+      name: 'admin',
+      role: 'admin',
+      active: true
     }
   })
+
+  const jmDoc = await payload.create({
+    collection: 'users',  //required
+    data: {
+      //required
+      email: 'jm@gmail.com',
+      password: '12345',
+      name: 'jm',
+      role: 'job-manager',
+      active: true,
+      
+    }
+  })
+
+  const appDoc = await payload.create({
+    collection: 'users',  //required
+    data: {
+      //required
+      email: 'am@gmail.com',
+      password: '12345',
+      name: 'am',
+      role: 'application-manager',
+      active: true,
+      
+    }
+  })
+  
+  
+  const quesDoc1 = await payload.create({
+    collection: 'users',  //required
+    data: {
+      //required
+      email: 'qm1@gmail.com',
+      password: '12345',
+      name: 'qm1',
+      role: 'question-manager1',
+      active: true,
+    }
+  })
+
+  const quesDoc2 = await payload.create({
+    collection: 'users',  //required
+    data: {
+      //required
+      email: 'qm2@gmail.com',
+      password: '12345',
+      name: 'qm2',
+      role: 'question-manager2',
+      active: true,
+    }
+  })
+
+  const assessDoc = await payload.create({
+    collection: 'users',  //required
+    data: {
+      //required
+      email: 'asm@gmail.com',
+      password: '12345',
+      name: 'asm',
+      role: 'assessment-manager',
+      active: true,
+    }
+  })
+
   // payload obj gives access to local api
   // NOT RECOMMENDED TO INSERT DATA IN MIGRATIONS
   //THIS IS ONLY FOR SCHEMA CHANGES
@@ -28,6 +95,8 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
       description: 'Join our team',
       location: 'hybrid',
       salary: 2000,
+      createdBy: jmDoc.id,
+      updatedBy: jmDoc.id
     }
   })
 
@@ -39,6 +108,8 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
       description: 'Join our team',
       location: 'hybrid',
       salary: 2000,
+      createdBy: jmDoc.id,
+      updatedBy: jmDoc.id
     }
   })
 
@@ -50,6 +121,8 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
       description: 'Join our team',
       location: 'hybrid',
       salary: 2000,
+      createdBy: jmDoc.id,
+      updatedBy: jmDoc.id
     }
   })
 
@@ -73,7 +146,9 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
             option: 'framework',
             isCorrect: false
           }
-        ]
+        ],
+        createdBy: quesDoc1.id,
+        updatedBy: quesDoc1.id
     }
   })
 
@@ -84,8 +159,11 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
         description: 'explain concept of node',
         duration: 30,
         questionType: 'essay',
-        response: 'writa a short essay'
-    }
+        response: 'writa a short essay',
+        createdBy: quesDoc2.id,
+        updatedBy: quesDoc2.id
+    },
+    
   })
 
   const questionDoc3 = await payload.create({
@@ -108,7 +186,9 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
             option: 'framework',
             isCorrect: false
           }
-        ]
+        ],
+        createdBy: quesDoc1.id,
+        updatedBy: quesDoc1.id
     }
   })
 
@@ -123,6 +203,8 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
         questionDoc1.id,
         questionDoc2.id
       ],
+      createdBy: assessDoc.id,
+      updatedBy: assessDoc.id
     }
   })
 
@@ -139,6 +221,8 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
         questionDoc1.id,
         questionDoc3.id
       ],
+      createdBy: assessDoc.id,
+      updatedBy: assessDoc.id
     }
   })
 
@@ -151,6 +235,8 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
       job: jobDoc1.id,
       // cv: 'https://payloadcms.com',
       status: 'applied',
+      createdBy: appDoc.id,
+      updatedBy: appDoc.id
     }
   })
 
@@ -163,7 +249,10 @@ export async function up({ payload, req, session }: MigrateUpArgs): Promise<void
       job: jobDoc2.id,
       // cv: 'https://payloadcms.com',
       status: 'interviewing',
-    }
+      createdBy: appDoc.id,
+      updatedBy: appDoc.id
+    },
+    
   })  
   
 }

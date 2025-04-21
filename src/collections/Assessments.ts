@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { COMMON_COLUMN_FIELDS } from './Common-fields'
 import { commonCollectionBeforeChangeCreatedByUpdatedByHook } from './Jobs/hooks/jobsBeforeChange.hook'
+import { User } from '@/payload-types'
 
 
 export const Assessments: CollectionConfig = {
@@ -73,5 +74,30 @@ export const Assessments: CollectionConfig = {
   timestamps: true,
   hooks: {
       beforeChange: [commonCollectionBeforeChangeCreatedByUpdatedByHook],
-    }
+    },
+    access: {
+    read: ({req}) => {
+      //read by admins and application managers
+      const user: User | null = req?.user;
+      return user?.role === 'admin' || user?.role === 'assessment-manager' 
+    },
+
+    create: ({req}) => {
+      //read by admins and application managers
+      const user: User | null = req?.user;
+      return user?.role === 'admin' || user?.role === 'assessment-manager' },
+    
+      update: ({req}) => {
+        //read by admins and application managers
+        const user: User | null = req?.user;
+        return user?.role === 'admin' || user?.role === 'assessment-manager' },
+      
+      delete: ({req}) => {
+        //read by admins and application managers
+        const user: User | null = req?.user;
+        return user?.role === 'admin' 
+
+  }
+
+  }
 }

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { COMMON_COLUMN_FIELDS } from '../Common-fields'
 import { commonCollectionBeforeChangeCreatedByUpdatedByHook } from '../Jobs/hooks/jobsBeforeChange.hook'
+import { User } from '@/payload-types'
 
 
 export const Users: CollectionConfig = {
@@ -27,6 +28,39 @@ export const Users: CollectionConfig = {
       // required: true
     },
     {
+      name: 'role',
+      label: 'Role',
+      type: 'select',
+      defaultValue: 'admin',
+      options: [
+        {
+          label: 'Admin',
+          value: 'admin'
+        },
+        {
+          label: 'Job Manager',
+          value: 'job-manager'
+        },
+        {
+          label: 'Application Manager',
+          value: 'application-manager'
+        },
+        {
+          label: 'Question Manager1',
+          value: 'question-manager1'
+        },
+        {
+          label: 'Question Manager2',
+          value: 'question-manager2'
+        },
+        {
+          label: 'Assessment Manager',
+          value: 'assessment-manager'
+        }
+      ],
+      required: true
+    },
+    {
       name: 'active',
       label: 'Is Active',
       type: 'checkbox',
@@ -49,5 +83,13 @@ export const Users: CollectionConfig = {
   timestamps: true,
   hooks: {
       beforeChange: [commonCollectionBeforeChangeCreatedByUpdatedByHook],
+  },
+  access: {
+    read: ({req}) =>{
+      //returning admin
+      const user: User | null = req?.user;
+      // return user?.role === 'admin'
+      return true
     }
+  }
 }

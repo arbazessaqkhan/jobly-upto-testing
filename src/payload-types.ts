@@ -132,6 +132,13 @@ export interface UserAuthOperations {
 export interface User {
   id: string;
   name?: string | null;
+  role:
+    | 'admin'
+    | 'job-manager'
+    | 'application-manager'
+    | 'question-manager1'
+    | 'question-manager2'
+    | 'assessment-manager';
   active?: boolean | null;
   createdBy?: (string | null) | User;
   updatedBy?: (string | null) | User;
@@ -338,6 +345,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
   active?: T;
   createdBy?: T;
   updatedBy?: T;

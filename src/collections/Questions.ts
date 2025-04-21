@@ -1,6 +1,8 @@
 import type { CollectionConfig } from 'payload'
 import { COMMON_COLUMN_FIELDS } from './Common-fields'
 import { commonCollectionBeforeChangeCreatedByUpdatedByHook } from './Jobs/hooks/jobsBeforeChange.hook'
+import { User } from '@/payload-types';
+import { Where } from 'payload';
 
 
 export const Questions: CollectionConfig = {
@@ -92,5 +94,70 @@ export const Questions: CollectionConfig = {
   timestamps: true,
   hooks: {
       beforeChange: [commonCollectionBeforeChangeCreatedByUpdatedByHook],
-    }
+    },
+    access: {
+        read: ({req}) => {
+          //read by admins and application managers
+          const user: User | null = req?.user;
+          if(user?.role === 'admin'){
+            return true
+          }
+          else if(user?.role === 'question-manager1' || user?.role === 'question-manager2'){
+            const where: Where = {
+              createdBy: {
+                equals: user?.id
+            }
+            
+          }
+          return where
+          }
+          return false
+        },
+    
+        create: ({req}) => {
+          //read by admins and application managers
+          const user: User | null = req?.user;
+          if(user?.role === 'admin'){
+            return true
+          }
+          else if(user?.role === 'question-manager1' || user?.role === 'question-manager2'){
+            const where: Where = {
+              createdBy: {
+                equals: user?.id
+            }
+            
+          }
+          return where
+          }
+          return false
+
+        }
+          ,
+        
+          update: ({req}) => {
+            //read by admins and application managers
+            const user: User | null = req?.user;
+          if(user?.role === 'admin'){
+            return true
+          }
+          else if(user?.role === 'question-manager1' || user?.role === 'question-manager2'){
+            const where: Where = {
+              createdBy: {
+                equals: user?.id
+            }
+            
+          }
+          return where
+          }
+          return false 
+        },
+          
+          delete: ({req}) => {
+            //read by admins and application managers
+            const user: User | null = req?.user;
+            return user?.role === 'admin' 
+    
+      }
+    
+      }
 }

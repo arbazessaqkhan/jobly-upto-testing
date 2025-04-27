@@ -218,6 +218,8 @@ export interface JobApplication {
   id: string;
   name?: string | null;
   email?: string | null;
+  phone?: string | null;
+  location?: string | null;
   job?: (string | null) | Job;
   cv?: (string | null) | Media;
   status?: ('applied' | 'interviewing' | 'hired' | 'rejected') | null;
@@ -407,6 +409,8 @@ export interface JobsSelect<T extends boolean = true> {
 export interface JobApplicationsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
+  phone?: T;
+  location?: T;
   job?: T;
   cv?: T;
   status?: T;

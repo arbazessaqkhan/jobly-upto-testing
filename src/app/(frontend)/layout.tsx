@@ -1,5 +1,8 @@
 import React from 'react'
 import './styles.css'
+import Header from '@/libs/layout/header'
+import { Toaster } from 'sonner'
+
 
 export const metadata = {
   description: 'A blank template using Payload in a Next.js app.',
@@ -12,7 +15,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <Header />
+        <main style={{ paddingTop: '6rem' }}>{children}</main>
+        <Toaster richColors/>
       </body>
     </html>
   )

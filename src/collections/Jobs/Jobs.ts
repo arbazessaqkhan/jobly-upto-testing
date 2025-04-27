@@ -2,7 +2,11 @@ import type {  CollectionConfig, FieldHook, FieldHookArgs } from 'payload'
 import { COMMON_COLUMN_FIELDS } from '../Common-fields'
 import { commonCollectionBeforeChangeCreatedByUpdatedByHook } from './hooks/jobsBeforeChange.hook'
 import { Job, User } from '@/payload-types'
-import { JobsEndpoint } from './endpoints/jobs.endpoints'
+import { JobsEndpoint } from './endpoints/samplejobs.endpoints'
+import { adminAndRoleAccess } from '@/access/adminAndRoleAccess'
+import { isAdminOnlyAccess } from '@/access/isAdminOnlyAccess'
+import { formJobEndpoint } from './endpoints/form.jobs.endpoints'
+
 
 // const fieldLevelHook: FieldHook = async({data})=>{
 //   if(data?.title){
@@ -25,9 +29,9 @@ const beforeChangeSlugFieldJobsHook: FieldHook = async(args: FieldHookArgs<Job>)
   
 }
 
-
 export const Jobs: CollectionConfig = {
   slug: 'jobs',
+  endpoints: [formJobEndpoint],
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'location', 'created_at'],
@@ -150,30 +154,15 @@ export const Jobs: CollectionConfig = {
   hooks: {
     beforeChange: [commonCollectionBeforeChangeCreatedByUpdatedByHook],
   },
-  endpoints: [JobsEndpoint],
+  // endpoints: [JobsEndpoint],
   access: {
-    read: ({req}) => {
-      //read by admins and application managers
-      const user: User | null = req?.user;
-      return user?.role === 'admin' || user?.role === 'job-manager' || user?.role === 'application-manager' 
-    },
+    read: adminAndRoleAccess('job-manager'),
 
-    create: ({req}) => {
-      //read by admins and application managers
-      const user: User | null = req?.user;
-      return user?.role === 'admin' || user?.role === 'job-manager' },
+    create: adminAndRoleAccess('job-manager'),
     
-      update: ({req}) => {
-        //read by admins and application managers
-        const user: User | null = req?.user;
-        return user?.role === 'admin' || user?.role === 'job-manager' },
+      update: adminAndRoleAccess('job-manager'),
       
-      delete: ({req}) => {
-        //read by admins and application managers
-        const user: User | null = req?.user;
-        return user?.role === 'admin' 
-
-  }
+      delete: isAdminOnlyAccess,
 
   }
 

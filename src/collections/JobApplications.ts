@@ -30,11 +30,20 @@ export const JobApplications: CollectionConfig = {
 
     },
     {
+      name: 'phone',
+      label: 'Phone',
+      type: 'text',
+    },
+    {
+      name: 'location',
+      label: 'Location',
+      type: 'text',
+    },
+    {
         name: 'job',
         label: 'Job',
         type: 'relationship',
         relationTo: 'jobs',
-
     },
     {
         name: 'cv',
@@ -82,8 +91,8 @@ export const JobApplications: CollectionConfig = {
   
       create: ({req}) => {
         //read by admins and application managers
-        const user: User | null = req?.user;
-        return user?.role === 'admin' || user?.role === 'application-manager' },
+        // const user: User | null = req?.user;
+        return true },
       
         update: ({req}) => {
           //read by admins and application managers

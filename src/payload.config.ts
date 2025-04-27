@@ -14,7 +14,7 @@ import { JobApplications } from './collections/JobApplications'
 import { Assessments } from './collections/Assessments'
 import { Questions } from './collections/Questions'
 import { Settings } from './app/globals/Settings'
-import { JobsEndpoint } from './collections/Jobs/endpoints/jobs.endpoints'
+import { JobsEndpoint } from './collections/Jobs/endpoints/samplejobs.endpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

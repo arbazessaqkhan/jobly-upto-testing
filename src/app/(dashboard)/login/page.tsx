@@ -4,12 +4,16 @@ import {toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {CommonFields, SuccessResponse} from "@lib/util";
 import {User} from "@/app/users.schema";
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 
 export default function Page() {
     const router = useRouter()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [rememberMe, setRememberMe] = useState(false)
+
+    const userContext = useContext(UserContext);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -27,7 +31,12 @@ export default function Page() {
             const user:  SuccessResponse<User & CommonFields>  = await response.json()
             console.log("User logged in:", user)
             toast.success("Login successfully");
-            localStorage.setItem("email", user.data.email)
+            // localStorage.setItem("email", user.data.email)
+            userContext?.setUser(user.data)
+            if(rememberMe){
+                localStorage.setItem("user", JSON.stringify(user.data))
+                //retreive the user in UserContext
+            }
             router.push('/')
         } else {
             const error = await response.json()

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {collections} from "@/app/sparkcms.config";
+import { UserContext } from "../(dashboard)/contexts/UserContext";
+import { useContext } from "react";
 
 const navItems = collections.map((collection) => {
   return {
@@ -23,8 +25,12 @@ const finalNavItems = [
 export default function Navbar() {
   const pathname = usePathname();
 
+  const context = useContext(UserContext);
+
   function isLoggedIn(): boolean {
-    return typeof window !== "undefined" && localStorage.getItem("email") !== null;
+    // return typeof window !== "undefined" && localStorage.getItem("email") !== null;
+    console.log('user',context?.user)
+    return context?.user != null;
   }
 
   return (

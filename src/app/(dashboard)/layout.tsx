@@ -5,6 +5,7 @@ import "../(dashboard)/(home)/globals.css";
 import BootstrapClient from "@/lib/layout/BootstrapClient";
 import Navbar from "@/app/menu/Navbar";
 import {ToastContainer} from 'react-toastify';
+import { UserProvider } from "./contexts/UserContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +31,14 @@ export default function RootLayout({
       <html lang="en">
       <link rel="stylesheet"
             href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"/>
+      <UserProvider>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-      <Navbar/>
-      {children}
-      <ToastContainer/>
-      <BootstrapClient/>
+        <Navbar/>
+        {children}
+        <ToastContainer/>
+        <BootstrapClient/>
       </body>
+      </UserProvider>
       </html>
   );
 }
